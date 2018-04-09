@@ -2,6 +2,7 @@ import numpy as np
 import pandas
 from ggplot import *
 import sys
+import statsmodels.api as sm
 
 
 def normalize_features(df):
@@ -83,16 +84,26 @@ def predictions(dataframe):
                                                             theta_gradient_descent, 
                                                             alpha, 
                                                             num_iterations)
-    # print cost_history
+
+    # print len(theta_gradient_descent)
     
+    # linear regression using OLS model
+    model = sm.OLS(values,features)
+    result = model.fit()
+    theta_ols = result.params
+    # sys.exit()    
+
     plot = None
     # -------------------------------------------------
     # Uncomment the next line to see your cost history
     # -------------------------------------------------
-    plot = plot_cost_history(alpha, cost_history)
+    # plot = plot_cost_history(alpha, cost_history)
     
     predictions = np.dot(features_array, theta_gradient_descent)
-    r_sq = r_squared(values,predictions)
+    r_sq = r_squared(values_array,predictions)
+    ols_predictions = np.dot(features_array, theta_ols)
+    ols_r_sq = r_squared(values, ols_predictions)
+    print ols_r_sq
     return predictions, plot, r_sq
 
 
@@ -119,7 +130,7 @@ def r_squared(values, predicted):
 if __name__ == '__main__':
     
     input_file = "data/turnstile_weather_v2.csv"
-    weather_turnstile = pandas.read_csv(file)
+    weather_turnstile = pandas.read_csv(input_file)
 
     # list of features
     print list(weather_turnstile)
