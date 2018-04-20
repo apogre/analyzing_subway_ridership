@@ -127,6 +127,8 @@ def r_squared(values, predicted):
     r_sq = num/den
     return r_sq
 
+
+
 if __name__ == '__main__':
     
     input_file = "data/turnstile_weather_v2.csv"
